@@ -7,11 +7,33 @@
 
 import SwiftUI
 
+/// What do we need?
+/// - Flexibility/Ease of use
+/// - Isolation
+/// - Scalability
+/// - Testability
+
 @main
 struct ModularNavigationAppApp: App {
+    @StateObject var rootRouter = RootRouter()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(rootRouter)
+        }
+    }
+}
+
+struct RootView: View {
+    @EnvironmentObject var rootRouter: RootRouter
+
+    var body: some View {
+        switch rootRouter.route {
+        case .auth:
+            AuthRootView(coordinator: AuthCoordinator(rootRouter: rootRouter))
+        case .main:
+            MainTabView()
         }
     }
 }
